@@ -1,0 +1,36 @@
+--- 
+- name: Deploying the application on Tomcat server
+  hosts: all
+  become: yes
+  vars: 
+    docker_username: "{{ docker_user }}"
+    docker_password: "{{ docker_pass }}"
+  tasks:
+    - name: Install docker
+      yum: 
+        name: docker
+        state: present
+
+    - name: Start the docker service
+      service:
+        name: docker
+        state: started
+
+    - name: add abc user to docker group
+      user:
+        name: abc
+        groups: docker
+        append: yes
+
+    - name : Docker login
+      shell: |
+        echo "{{ docker_password }}" | docker login -u "{{ docker_username }}" --password-stdin
+      no_log: true
+      register: login_result
+
+    - name: Verify Docker login
+      shell: docker ps
+      register: verify_result
+
+    - name: Build the Docker Container
+      command: docker run -d --name javapp_container -p 1234:8080 dipanshur/javapp_image
