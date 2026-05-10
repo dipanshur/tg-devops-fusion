@@ -7,10 +7,7 @@
     docker_password: "{{ docker_pass }}"
   tasks:
     - name: Install docker
-      yum: 
-        name: docker
-        state: present
-        update_cache: yes
+      command: yum install -y docker
 
     - name: Start the docker service
       service:
