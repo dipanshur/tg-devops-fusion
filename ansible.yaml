@@ -36,4 +36,4 @@
       shell: docker rm -f javapp_container || true
 
     - name: Build the Docker Container
-      command: docker run -d --name javapp_container -p 1234:8080 dipanshur/javapp_image
+      command: docker run -d --name javapp_container -p 1234:8080 dipanshur/javapp_image:latest
